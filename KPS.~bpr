@@ -1,0 +1,191 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!-- C++Builder XML Project -->
+<PROJECT>
+  <MACROS>
+    <VERSION value="BCB.06.00"/>
+    <PROJECT value="KPS.exe"/>
+    <OBJFILES value="KPS.obj mPasswordForm.obj FirmsForm.obj OpAudit.obj mFormGroup.obj 
+      mFormOper.obj DataModule.obj Tools_proc.obj ReadTread.obj WriteTread.obj 
+      Unit2.obj Unit1.obj MainPForm.obj mSetParams.obj ParamsN.obj QrepForm.obj 
+      Unit3.obj"/>
+    <RESFILES value="KPS.res"/>
+    <IDLFILES value=""/>
+    <IDLGENFILES value=""/>
+    <DEFFILE value=""/>
+    <RESDEPEN value="$(RESFILES) mPasswordForm.dfm FirmsForm.dfm OpAudit.dfm mFormGroup.dfm 
+      mFormOper.dfm DataModule.dfm Unit2.dfm Unit1.dfm MainPForm.dfm 
+      mSetParams.dfm ParamsN.dfm QrepForm.dfm Unit3.dfm"/>
+    <LIBFILES value=""/>
+    <LIBRARIES value="cxExportVCLC6.lib frxe6.lib FS6.lib frx6.lib"/>
+    <SPARELIBS value="vcl.lib rtl.lib vclx.lib TeeImage7C6.lib Tee7C6.lib TeeUI7C6.lib dbrtl.lib 
+      bdertl.lib sqldir60.lib vcldb.lib frx6.lib FS6.lib frxe6.lib qrpt.lib 
+      cxLibraryVCLC6.lib dxThemeC6.lib cxEditorsVCLC6.lib cxDataC6.lib 
+      cxGridVCLC6.lib cxExportVCLC6.lib cxExtEditorsVCLC6.lib 
+      cxPageControlVCLC6.lib adortl.lib AbkStdCB6.lib AbkDBStdCB6.lib"/>
+    <PACKAGES value="vcl.bpi rtl.bpi dbrtl.bpi adortl.bpi vcldb.bpi vclx.bpi ibxpress.bpi 
+      dsnap.bpi cds.bpi bdecds.bpi bdertl.bpi qrpt.bpi visualclx.bpi 
+      visualdbclx.bpi dsnapcrba.bpi dsnapcon.bpi bcbsmp.bpi vclie.bpi xmlrtl.bpi 
+      inet.bpi inetdbbde.bpi inetdbxpress.bpi inetdb.bpi vcldbx.bpi nmfast.bpi 
+      webdsnap.bpi bcbie.bpi websnap.bpi soaprtl.bpi dclocx.bpi dbexpress.bpi 
+      dbxcds.bpi indy.bpi bcb97axserver.bpi kbmMemC6Run.bpi AbkStdCB6.bpi 
+      AbkDBStdCB6.bpi AbkLibCB6.bpi TeeDB7C6.bpi Tee7C6.bpi TeeUI7C6.bpi 
+      TeeLanguage7C6.bpi TeePro7C6.bpi TeeGL7C6.bpi TeeQR7C6.bpi 
+      TeeTree2C6Tee7.bpi TeeImage7C6.bpi cxLibraryVCLC6.bpi dxThemeC6.bpi 
+      cxEditorsVCLC6.bpi cxDataC6.bpi cxExtEditorsVCLC6.bpi cxGridVCLC6.bpi 
+      cxPageControlVCLC6.bpi cxPivotGridC6.bpi cxSchedulerVCLC6.bpi 
+      cxSpreadSheetVCLC6.bpi cxTreeListVCLC6.bpi cxVerticalGridVCLC6.bpi 
+      dxComnC6.bpi dxBarC6.bpi dxBarDBNavC6.bpi dxBarExtDBItemsC6.bpi 
+      dxBarExtItemsC6.bpi dxDBOrC6.bpi dxOrgCC6.bpi dxdbtrC6.bpi dxDockingC6.bpi 
+      dxEdtrC6.bpi dxElibC6.bpi dxDBEdC6.bpi dxFlowChartC6.bpi dxInsC6.bpi 
+      dxLayoutControlC6.bpi dxMasterViewC6.bpi dxmdsC6.bpi dxNavBarC6.bpi 
+      dxGDIPlusC6.bpi dxObjInsC6.bpi dxPSCorec6.bpi dxsbC6.bpi dxtrmdC6.bpi 
+      dxLayoutControlcxEditAdaptersC6.bpi dxLayoutControldxEditAdaptersC6.bpi 
+      dxPSLnksC6.bpi dxPScxCommonC6.bpi dxPScxExtCommonC6.bpi dxPScxPCProdC6.bpi 
+      dxPSPrVwAdvC6.bpi dxPSTeeChartC6.bpi dxPSDBTeeChartC6.bpi 
+      dxPScxGridLnkc6.bpi dxPScxScheduler2LnkC6.bpi dxPScxSSLnkc6.bpi 
+      dxPScxTLLnkC6.bpi dxPScxVGridLnkC6.bpi dxPSdxDBOCLnkC6.bpi 
+      dxPSdxOCLnkC6.bpi dxPSdxDBTVLnkC6.bpi dxPSdxFCLnkC6.bpi dxPSdxInsLnkC6.bpi 
+      dxPSdxLCLnkC6.bpi dxPSdxMVLnkC6.bpi dxPSdxOILnkC6.bpi Iocomp65.bpi 
+      sqldir60.bpi"/>
+    <PATHCPP value=".;"/>
+    <PATHPAS value=".;"/>
+    <PATHRC value=".;"/>
+    <PATHASM value=".;"/>
+    <DEBUGLIBPATH value="$(BCB)\lib\debug"/>
+    <RELEASELIBPATH value="$(BCB)\lib\release"/>
+    <LINKER value="ilink32"/>
+    <USERDEFINES value="_DEBUG"/>
+    <SYSDEFINES value="_RTLDLL;NO_STRICT;USEPACKAGES"/>
+    <MAINSOURCE value="KPS.cpp"/>
+    <INCLUDEPATH value="&quot;..\Копия Test2WEBK&quot;;..\TestComPort2;..\NEMOCNICE;&quot;C:\Program Files\FastReports\FastReport 4\LibBCB6&quot;;&quot;C:\Program Files\Borland\CBuilder6\Projects&quot;;C:\ProgRams\Test2WEBK;$(BCB)\include;$(BCB)\include\vcl"/>
+    <LIBPATH value="&quot;..\Копия Test2WEBK&quot;;..\TestComPort2;..\NEMOCNICE;&quot;C:\Program Files\FastReports\FastReport 4\LibBCB6&quot;;&quot;C:\Program Files\Borland\CBuilder6\Projects&quot;;C:\ProgRams\Test2WEBK;$(BCB)\lib\obj;$(BCB)\lib"/>
+    <WARNINGS value="-w-par"/>
+    <OTHERFILES value=""/>
+  </MACROS>
+  <OPTIONS>
+    <IDLCFLAGS value="-I&quot;..\Копия Test2WEBK&quot; -I..\TestComPort2 -I..\NEMOCNICE 
+      -I&quot;C:\Program Files\FastReports\FastReport 4\LibBCB6&quot; 
+      -I&quot;C:\Program Files\Borland\CBuilder6\Projects&quot; -IC:\ProgRams\Test2WEBK 
+      -I$(BCB)\include -I$(BCB)\include\vcl -src_suffix cpp -D_DEBUG -boa"/>
+    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl60.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y -v -vi- -c 
+      -tW -tWM"/>
+    <PFLAGS value="-$Y+ -$W -$O- -$A8 -v -JPHNE -M"/>
+    <RFLAGS value=""/>
+    <AFLAGS value="/mx /w2 /zi"/>
+    <LFLAGS value="-D&quot;&quot; -aa -Tpe -x -Gn -v"/>
+    <OTHERFILES value=""/>
+  </OPTIONS>
+  <LINKER>
+    <ALLOBJ value="c0w32.obj $(PACKAGES) Memmgr.Lib sysinit.obj $(OBJFILES)"/>
+    <ALLRES value="$(RESFILES)"/>
+    <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cp32mti.lib"/>
+    <OTHERFILES value=""/>
+  </LINKER>
+  <FILELIST>
+      <FILE FILENAME="KPS.res" FORMNAME="" UNITNAME="KPS.res" CONTAINERID="ResTool" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="KPS.cpp" FORMNAME="" UNITNAME="KPS" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="mPasswordForm.cpp" FORMNAME="PasswordForm" UNITNAME="mPasswordForm" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="FirmsForm.cpp" FORMNAME="FirmForm" UNITNAME="FirmsForm" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="OpAudit.cpp" FORMNAME="AuditForm" UNITNAME="OpAudit" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="mFormGroup.cpp" FORMNAME="FormGroup" UNITNAME="mFormGroup" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="mFormOper.cpp" FORMNAME="FormOperator" UNITNAME="mFormOper" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="DataModule.cpp" FORMNAME="DataModule1" UNITNAME="DataModule" CONTAINERID="CCompiler" DESIGNCLASS="TDataModule" LOCALCOMMAND=""/>
+      <FILE FILENAME="Defines.h" FORMNAME="" UNITNAME="Defines.h" CONTAINERID="" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="Tools_proc.cpp" FORMNAME="" UNITNAME="Tools_proc" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="ReadTread.cpp" FORMNAME="" UNITNAME="ReadTread" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="WriteTread.cpp" FORMNAME="" UNITNAME="WriteTread" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="Unit2.cpp" FORMNAME="Form2" UNITNAME="Unit2" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="Unit1.cpp" FORMNAME="SubscrForm" UNITNAME="Unit1" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="DefWinMessage.h" FORMNAME="" UNITNAME="DefWinMessage.h" CONTAINERID="" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="MainPForm.cpp" FORMNAME="MainKPSForm" UNITNAME="MainPForm" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="mSetParams.cpp" FORMNAME="SelectParamsForm" UNITNAME="mSetParams" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="ParamsN.cpp" FORMNAME="ParamsForm" UNITNAME="ParamsN" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="QrepForm.cpp" FORMNAME="Form4" UNITNAME="QrepForm" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="Unit3.cpp" FORMNAME="PrintForm3" UNITNAME="Unit3" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+  </FILELIST>
+  <BUILDTOOLS>
+  </BUILDTOOLS>
+
+  <IDEOPTIONS>
+[Version Info]
+IncludeVerInfo=0
+AutoIncBuild=0
+MajorVer=1
+MinorVer=0
+Release=0
+Build=0
+Debug=0
+PreRelease=0
+Special=0
+Private=0
+DLL=0
+Locale=1049
+CodePage=1251
+
+[Version Info Keys]
+CompanyName=
+FileDescription=
+FileVersion=1.0.0.0
+InternalName=
+LegalCopyright=
+LegalTrademarks=
+OriginalFilename=
+ProductName=
+ProductVersion=1.0.0.0
+Comments=
+
+[Excluded Packages]
+c:\program files\borland\cbuilder6\Bin\dclite60.bpl=Borland Integrated Translation Environment
+c:\program files\borland\cbuilder6\Bin\dcltee60.bpl=(Untitled)
+c:\program files\borland\cbuilder6\Bin\dcldss60.bpl=(Untitled)
+c:\program files\borland\cbuilder6\Bin\dcltqr60.bpl=(Untitled)
+C:\Program Files\FastReports\FastReport 4\LibBCB6\fstee6.bpl=FastScript 1.9 Tee Components
+
+[HistoryLists\hlIncludePath]
+Count=4
+Item0=..\Копия Test2WEBK;..\TestComPort2;..\NEMOCNICE;C:\Program Files\FastReports\FastReport 4\LibBCB6;C:\Program Files\Borland\CBuilder6\Projects;C:\ProgRams\Test2WEBK;$(BCB)\include;$(BCB)\include\vcl
+Item1=..\TestComPort2;..\NEMOCNICE;C:\Program Files\FastReports\FastReport 4\LibBCB6;C:\Program Files\Borland\CBuilder6\Projects;C:\ProgRams\Test2WEBK;$(BCB)\include;$(BCB)\include\vcl
+Item2=..\NEMOCNICE;C:\Program Files\FastReports\FastReport 4\LibBCB6;C:\Program Files\Borland\CBuilder6\Projects;C:\ProgRams\Test2WEBK;$(BCB)\include;$(BCB)\include\vcl
+Item3=C:\Program Files\Borland\CBuilder6\Projects;C:\ProgRams\Test2WEBK;$(BCB)\include;$(BCB)\include\vcl
+
+[HistoryLists\hlLibraryPath]
+Count=4
+Item0=..\Копия Test2WEBK;..\TestComPort2;..\NEMOCNICE;C:\Program Files\FastReports\FastReport 4\LibBCB6;C:\Program Files\Borland\CBuilder6\Projects;C:\ProgRams\Test2WEBK;$(BCB)\lib\obj;$(BCB)\lib
+Item1=..\TestComPort2;..\NEMOCNICE;C:\Program Files\FastReports\FastReport 4\LibBCB6;C:\Program Files\Borland\CBuilder6\Projects;C:\ProgRams\Test2WEBK;$(BCB)\lib\obj;$(BCB)\lib
+Item2=..\NEMOCNICE;C:\Program Files\FastReports\FastReport 4\LibBCB6;C:\Program Files\Borland\CBuilder6\Projects;C:\ProgRams\Test2WEBK;$(BCB)\lib\obj;$(BCB)\lib
+Item3=C:\Program Files\Borland\CBuilder6\Projects;C:\ProgRams\Test2WEBK;$(BCB)\lib\obj;$(BCB)\lib
+
+[HistoryLists\hlDebugSourcePath]
+Count=1
+Item0=$(BCB)\source\vcl
+
+[HistoryLists\hlConditionals]
+Count=1
+Item0=_DEBUG
+
+[Debugging]
+DebugSourceDirs=$(BCB)\source\vcl
+
+[Parameters]
+RunParams=
+Launcher=
+UseLauncher=0
+DebugCWD=
+HostApplication=
+RemoteHost=
+RemotePath=
+RemoteLauncher=
+RemoteCWD=
+RemoteDebug=0
+
+[Compiler]
+ShowInfoMsgs=0
+LinkDebugVcl=0
+LinkCGLIB=0
+
+[CORBA]
+AddServerUnit=1
+AddClientUnit=1
+PrecompiledHeaders=1
+  </IDEOPTIONS>
+</PROJECT>

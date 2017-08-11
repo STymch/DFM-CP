@@ -1,0 +1,237 @@
+//---------------------------------------------------------------------------
+
+#ifndef DataModuleH
+#define DataModuleH
+//---------------------------------------------------------------------------
+#include <Classes.hpp>
+#include <Controls.hpp>
+#include <StdCtrls.hpp>
+#include <Forms.hpp>
+#include <DB.hpp>
+#include <DBTables.hpp>
+#include "SDEngine.hpp"
+#include <ADODB.hpp>
+#include <deque>
+#include <math.h>
+
+using namespace std;
+
+struct Otchet{      //Структура записи для печатей
+public:		 // User declarations
+  int   TypePr;       //1 = Qn, 2 = Qt, 3= Qmin
+  float Qzad;         //заданный расход  м3/час
+  float DQzad;        //Погрешность в %
+  float Vzad;         //V
+  float BegValue;     //нач знач счетчика
+  float EndValue;     //кон знач счетчика
+  float VScetc;       //объем по счетчику
+  int   Tsec;         //Длит в секундах
+  float Qsredn;       //средний расход  м3/час
+  float DQfact;       //погрешность
+  bool  StatZ;
+  bool  Rezult;
+  BYTE  BegBmp[1200000];
+  int   BegBmpLength;
+  BYTE  EndBmp[1200000];
+  int   EndBmpLength;
+};
+struct SubscrRec{      //Структура записи для documenta
+public:		// User declarations
+  char SurName[24];   //Фамилия
+  char Name[24];      //Имя
+  char FName[24];     //Отчество
+  TDateTime BornDate; //Дата выпуска
+  char City[24];      //Город
+  char Street[24];    //Улица
+  char Haus[8];       //Дом
+  char Korpus[8];     //корпус
+  char Bit[8];        //Квартира
+  char Tipe[24];      //Тип счетчика
+  char NSch[24];      //N cчетчика
+  int  Day;           //den
+  int  Month;           //Month
+  int  Year;           //God
+  float Dolgota;       //
+  float Shirota;       //
+};
+struct Operator{      //Структура записи оператора
+public:		// User declarations
+  char OpName[24];
+  char Password1[24];
+  char GroupName[24];
+  char SurName[24];   //Фамилия
+  char Name[24];      //Имя
+  char FName[24];     //Отчество
+
+  short UndeleteF;
+};
+struct OpGroup{      //Структура записи группы
+public:		// User declarations
+  char GrName[24];
+  char GrFullName[128];
+  DWORD PRights;
+  short UndeleteF;
+};
+//class TFilter
+//{
+//public:		// User declarations
+//  bool  Active;
+//  char  Virag[80];
+//  char  VirRus[80];
+//  char  Comment[40];
+//};
+struct Diametry
+{
+public:		// User declarations
+   int   Diametr;
+   char  Klass[4]; //1 символ класса
+   double Qn;
+   double KQt;
+   double KQm;
+};
+struct DopustPogr
+{
+public:		// User declarations
+   char  Klass[8]; //1 символ класса
+   char  QTipe[8]; //1 символ класса
+   char  Voda[8];  //1 символ класса
+   double   Pogr;
+};
+struct RecvData1         //Структура записи оператора
+{
+public:		// User declarations
+  BYTE Status;
+  float TVozd;
+  float Vlagnost;
+  float TVodY;
+  short Napruga;
+  float Q;
+  DWORD TimeInt;
+  DWORD CountN;
+  DWORD Count;
+};
+struct RecvData         //Структура записи принимаемых
+{
+public:
+  union{		// User declarations
+  BYTE Arr[31];
+  RecvData1 RD;
+  }Uval;
+};
+struct Grenc         //Структура записи корректировок
+{
+public:
+  float LGr;
+  float RGr;
+  float Const;
+};
+
+//---------------------------------------------------------------------------
+class TDataModule1 : public TDataModule
+{
+__published:	// IDE-managed Components
+        TDataSource *DataSource10;
+  TDataSource *DataSource3;
+  TADOConnection *ADOConnection1;
+  TADOCommand *ADOCommand1;
+  TADODataSet *ADODataSet1;
+  TADOQuery *ADOQuery1;
+        TQuery *Query1;
+        TTable *Table1;
+        TTable *Table2;
+        TTable *Table3;
+        TDataSource *DataSource2;
+        TDataSource *DataSource1;
+        TDataSource *DataSource4;
+        TQuery *Query2;
+        TQuery *Query3;
+private:	// User declarations
+public:		// User declarations
+  __fastcall TDataModule1(TComponent* Owner);
+//  bool InsertOperator(Operator *O);
+//  bool UpdateOperator(Operator *O);
+//  bool DelOperator(Operator *O);
+//  bool InsertGroup(OpGroup *O);
+//  bool UpdateGroup(OpGroup *O);
+//  bool DelGroup(OpGroup *O);
+//  bool ConnectionStringSetting(AnsiString DBName);
+//  bool SQLWRITE(AnsiString SQLStr);
+//  bool SQLRead(AnsiString SQLStr);
+  bool IsTableExist(AnsiString TableName);
+  bool RestartDB(void);
+  bool TDataModule1::InsertParametersPx(AnsiString S);
+  bool TDataModule1::InsertOperatorPx(Operator *O);
+  bool TDataModule1::UpdateOperatorPx(Operator *O);
+  bool TDataModule1::DelOperatorPx(Operator *O);
+  bool TDataModule1::InsertGroupPx(OpGroup *O);
+  bool TDataModule1::UpdateGroupPx(OpGroup *O);
+  bool TDataModule1::DelGroupPx(OpGroup *O);
+  double TDataModule1::Round(double Value, int Precision);
+  bool TDataModule1::PGroupsBaseExist(void);
+  bool TDataModule1::POperatorsBaseExist(void);
+  bool TDataModule1::PGroupsBaseCreated(void);
+  bool TDataModule1::POperatorsBaseCreated(void);
+  bool TDataModule1::PParametersBaseCreated(void);
+  bool TDataModule1::PParametersBaseExist(void);
+  bool TDataModule1::GroupsRead(AnsiString SQLStr);
+  bool TDataModule1::OperatorsRead(AnsiString SQLStr);
+  bool TDataModule1::ParametersRead(AnsiString SQLStr);
+  AnsiString ReplPunknaZP2(AnsiString SI);
+  AnsiString ReplZPnaPunk2(AnsiString SI);           //float всегда с точкой
+  AnsiString    OpName;    //Текущий оператор
+  AnsiString    PassWord;  //Пароль оператора
+  AnsiString    GroupName; //Группа текущего оператора
+  int           OpRights;  //Права доступа текущего оператора
+  deque <Operator>  OpList;
+  deque <OpGroup>   GrList;
+//  TFilter           CurF;
+  AnsiString        ErrorString;
+  AnsiString        ServerName;
+  deque <Diametry>  DiamOldList;  //
+  deque <Diametry>  DiamNewList;  //
+  deque <DopustPogr> ISODopList;
+  deque <DopustPogr> LNCEDopList;
+  deque <DopustPogr> OLDDopList;
+  deque <Grenc>     GrencList;
+public:		// User declarations
+  double          Vmin,     Vt,       Vn;           //Величины стандартов пролива  Литры
+  double          Qn;                               //величина объема пролива кубометров в час
+  double          Qt;                               //величина объема пролива кубометров в час
+  double          Qmin;                             //величина объема пролива кубометров в час
+  double          QnLitr;                               //величина объема пролива литров в час
+  double          QtLitr;                               //величина объема пролива литров в час
+  double          QminLitr;                             //величина объема пролива литров в час
+  double          DQn;                               //Дельта величины объема пролива литров в час
+  double          DQt;                               //Дельта величины объема пролива литров в час
+  double          DQmin;                             //Дельта величины объема пролива литров в час
+  int             Diametr;
+  double          Tmin;                             //min T izmerenija
+  double          Tmax;                             //max T izmerenija
+
+  double          QminL, QminR;         //Правые и левые границы отклонений адля устаноления скорости потока кубометров в час
+  double          QtL,   QtR;           //Правые и левые границы отклонений адля устаноления скорости потока кубометров в час
+  double          QnomL,   QnomR;       //Правые и левые границы отклонений адля устаноления скорости потока кубометров в час
+  double          DminL, DminR;            //Допустимые Проценты на меньшее и больше отличия пролива
+  double          DtL, DtR;                //Допустимые Проценты на меньшее и больше отличия пролива
+  double          DnL, DnR;                //Допустимые Проценты на меньшее и больше отличия пролива
+  SubscrRec       SbR;
+  RecvData        RecData;                          //Плученная порция данных
+  int             Speed;                            //Скорость
+  int             TimeOut;                          //таймаут
+  double          QminLGr;     //КОНСТАНТА ЛЕВОЙ ГРАНИЦЫ Qmin
+  double          QminRGr;     //КОНСТАНТА правой ГРАНИЦЫ Qmin
+  double          QtLGr;       //КОНСТАНТА ЛЕВОЙ ГРАНИЦЫ Qt
+  double          QtRGr;       //КОНСТАНТА правой ГРАНИЦЫ Qt
+  double          QnLGr;       //КОНСТАНТА ЛЕВОЙ ГРАНИЦЫ Qn
+  double          QnRGr;       //КОНСТАНТА правой ГРАНИЦЫ Qn
+  double          TXolL;       //Левая граница темп. холодной воды
+  double          TXolR;       //Правая граница темп. холодной воды
+  double          TGorL;
+  double          TGorR;
+  double          VKonst;      //Константа Объема проливаемой воды
+  double          TimeConst;   //Константа времени после ремонта или выпуска
+};
+//---------------------------------------------------------------------------
+extern PACKAGE TDataModule1 *DM;
+//---------------------------------------------------------------------------
+#endif

@@ -1,0 +1,384 @@
+//---------------------------------------------------------------------------
+
+#include <vcl.h>
+#pragma hdrstop
+
+#include "OpAudit.h"
+#include "MainP.h"
+//---------------------------------------------------------------------------
+#pragma package(smart_init)
+#pragma resource "*.dfm"
+TAuditForm *AuditForm;
+char *GroupTitle[] =  {"Имя группы","Описание"};
+char *OperTitle[]  =  {"Имя оператора","Группа"};
+//extern deque <Operator>  OpList;
+//extern deque <OpGroup>   GrList;
+
+//---------------------------------------------------------------------------
+__fastcall TAuditForm::TAuditForm(TComponent* Owner, TDataModule1 *DM1)
+  : TForm(Owner)
+{
+  GrIndex = OpIndex = -1;
+  DM = DM1;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TAuditForm::NewGroupsClick(TObject *Sender)
+{
+  OpGroup G;
+  G.PRights = 0;
+  if(!(DM->OpRights & rApEdit)) return;
+  FormGroup = new TFormGroup(this, DM, true);
+  FormGroup->Caption = "Создать группу операторов";
+  for(int i = 0; i < CheckListBox1->Count; i++)
+  {
+    FormGroup->CheckListBox1->Items->Add(CheckListBox1->Items->Strings[i]);
+  }
+  if(FormGroup->ShowModal() == ID_OK)
+  {
+    strcpy(G.GrName, Trim(FormGroup->Edit1->Text).c_str());
+    strcpy(G.GrFullName, Trim(FormGroup->Memo1->Text).c_str());
+    G.UndeleteF = FormGroup->CheckBox1->Checked;
+    int j = 1;
+    for(int i = 0; i < CheckListBox1->Count; i++)
+    {
+      if(FormGroup->CheckListBox1->Checked[i])
+        G.PRights = G.PRights | j;
+      j = j << 1;
+    }
+    if(!DM->InsertGroup(&G))
+    {
+      Application->MessageBox("Не могу записать новую группу!","АPUS",MB_OK| MB_ICONERROR);
+      return;
+    }
+    DM->GrList.push_back(G);
+    DrawGrid1->Refresh();
+  }
+  delete FormGroup;
+}
+//---------------------------------------------------------------------------
+void __fastcall TAuditForm::EditGroupClick(TObject *Sender)
+{
+  int     j;
+  OpGroup G;
+
+  if(!(DM->OpRights & rApEdit)) return;
+  if( GrIndex == -1) return;
+  G = DM->GrList[GrIndex];
+  FormGroup = new TFormGroup(this, DM, false);
+  FormGroup->Caption = "Редактировать группу операторов";
+  FormGroup->BitBtn1->Caption = "Редактировать";
+  for(int i = 0; i < CheckListBox1->Count; i++)
+  {
+    FormGroup->CheckListBox1->Items->Add(CheckListBox1->Items->Strings[i]);
+  }
+  j = 1;
+  for(int i = 0; i < CheckListBox1->Count; i++)
+  {
+    if(G.PRights & j)
+      FormGroup->CheckListBox1->Checked[i] = true;
+    j = j << 1;
+  }
+  AnsiString S;
+  for(int z = 0; z < 24; z++) S += G.GrName[z];  //  FormGroup->Edit1->Text = (AnsiString)G.GrName;
+  FormGroup->Edit1->Text = S;
+  FormGroup->Memo1->Text = G.GrFullName;
+  FormGroup->CheckBox1->Checked = G.UndeleteF;
+  if(FormGroup->ShowModal() == ID_OK)
+  {
+    strcpy(G.GrName, Trim(FormGroup->Edit1->Text).c_str());
+    strcpy(G.GrFullName, Trim(FormGroup->Memo1->Text).c_str());
+    G.UndeleteF = FormGroup->CheckBox1->Checked;
+    G.PRights = 0;
+    int j = 1;
+    for(int i = 0; i < CheckListBox1->Count; i++)
+    {
+      if(FormGroup->CheckListBox1->Checked[i])
+        G.PRights = G.PRights | j;
+      j = j << 1;
+    }
+    if(!DM->UpdateGroup(&G))
+    {
+      Application->MessageBox("Не могу записать измененную группу!","АPUS",MB_OK| MB_ICONERROR);
+      return;
+    }
+    DM->GrList[GrIndex].PRights   = G.PRights;
+    DM->GrList[GrIndex].UndeleteF = G.UndeleteF;
+    strcpy(DM->GrList[GrIndex].GrFullName, G.GrFullName);
+    DrawGrid1->Refresh();
+  }
+  delete FormGroup;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TAuditForm::DelGroupClick(TObject *Sender)
+{
+  int Index;
+  if(!(DM->OpRights & rApEdit)) return;
+  GName = DM->GrList[GrIndex].GrName; //Имя группы
+  if(GName == DM->GroupName)
+  {
+    Application->MessageBox("Нельзя удалять собственную группу!","АPUS",MB_OK| MB_ICONERROR);
+    return;
+  }
+  for(int i = 0; i < (int)DM->GrList.size(); i++)
+  {
+    if(strcmp(DM->GrList[i].GrName, GName.c_str()) == 0)
+    {
+      if(strcmp(DM->GrList[i].GrName, "Администраторы") == 0)
+      {
+        Application->MessageBox("Нельзя удалять группу 'Администраторы'!","АPUS",MB_OK| MB_ICONERROR);
+        return;
+      }
+//      if((DM->GrList[i].UndeleteF)&&(DM->CurOpName != "Администратор"))
+      if((DM->GrList[i].UndeleteF)&&(DM->OpName != "Администратор"))
+      {
+        Application->MessageBox("Неудаляемую группу может удалять только Администратор!","АPUS",MB_OK| MB_ICONERROR);
+        return;
+      }
+      for(int j = 0; j < (int)DM->OpList.size(); j++)
+      {
+        if(strcmp(DM->OpList[j].GroupName, GName.c_str()) == 0)
+        {
+          Application->MessageBox("В данную группу входят операторы, сначала удалите их!","АPUS",MB_OK| MB_ICONERROR);
+          return;
+        }
+      }
+      Index = i;
+      break;
+    }
+  }
+  if(!DM->DelGroup(&DM->GrList[Index]))
+  {
+     Application->MessageBox("Не могу удалить группу!","АPUS",MB_OK| MB_ICONERROR);
+     return;
+  }
+  DM->GrList.erase(DM->GrList.begin() + Index);
+  DrawGrid1->Refresh();
+  Application->MessageBox("Группа успешно удалена!","АPUS",MB_OK| MB_ICONERROR);
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TAuditForm::AddOpClick(TObject *Sender)
+{
+  Operator O;
+  AnsiString S1;
+
+  if(GrIndex == -1) return;
+  
+  if(!(DM->OpRights & rApEdit)) return;
+  FormOperator = new TFormOperator(this, DM, true);
+  FormOperator->Caption = "Создать оператора";
+//  S1 = (AnsiString)DM->GrList[GrIndex].GrName;  S1 = Trim(S1.SubString(1,24));
+  FormOperator->Edit3->Text = Trim((AnsiString)DM->GrList[GrIndex].GrName);
+//  FormOperator->Edit3->Text = S1;
+  if(FormOperator->ShowModal() == ID_OK)
+  {
+    strcpy(O.OpName, Trim(FormOperator->Edit1->Text).c_str());
+    strcpy(O.Password1, Trim(FormOperator->Edit2->Text).c_str());
+    strcpy(O.SurName, Trim(FormOperator->Edit4->Text).c_str());
+    strcpy(O.Name, Trim(FormOperator->Edit5->Text).c_str());
+    strcpy(O.FName, Trim(FormOperator->Edit6->Text).c_str());
+    O.UndeleteF = FormOperator->CheckBox1->Checked;
+//    strcpy(O.GroupName, DM->GrList[GrIndex].GrName);
+    strcpy(O.GroupName, S1.c_str());
+    if(!DM->InsertOperator(&O))
+    {
+      Application->MessageBox("Не могу записать нового оператора!","АPUS",MB_OK| MB_ICONERROR);
+      return;
+    }
+    DM->OpList.push_back(O);
+    DrawGrid1Click(NULL);
+//    DrawGrid2->Refresh();
+  }
+  delete FormOperator;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TAuditForm::EditOpClick(TObject *Sender)
+{
+  Operator O;
+
+  OpIndex = DrawGrid2->Row -1;
+  if(OpIndex == -1) return;
+  FormOperator = new TFormOperator(this, DM, false);
+  FormOperator->Caption = "Редактировать оператора";
+  FormOperator->BitBtn1->Caption = "Редактировать";
+  FormOperator->Edit1->Text        = GrOperators[OpIndex].OpName;
+  FormOperator->Edit2->Text        = GrOperators[OpIndex].Password1;
+  FormOperator->Edit3->Text        = GrOperators[OpIndex].GroupName;
+  FormOperator->Edit4->Text        = GrOperators[OpIndex].SurName;
+  FormOperator->Edit5->Text        = GrOperators[OpIndex].Name;
+  FormOperator->Edit6->Text        = GrOperators[OpIndex].FName;
+  FormOperator->CheckBox1->Checked = GrOperators[OpIndex].UndeleteF;
+//  if(!(((DM->OpRights & rApEdit)) || ((AnsiString)GrOperators[OpIndex].OpName == DM->CurOpName))) return;
+  if(!(((DM->OpRights & rApEdit)) || ((AnsiString)GrOperators[OpIndex].OpName == DM->OpName))) return;
+
+  if(FormOperator->ShowModal() == ID_OK)
+  {
+    strcpy(O.OpName, Trim(FormOperator->Edit1->Text).c_str());
+    strcpy(O.Password1, Trim(FormOperator->Edit2->Text).c_str());
+    strcpy(O.GroupName, Trim(FormOperator->Edit3->Text).c_str());
+    strcpy(O.SurName, Trim(FormOperator->Edit4->Text).c_str());
+    strcpy(O.Name, Trim(FormOperator->Edit5->Text).c_str());
+    strcpy(O.FName, Trim(FormOperator->Edit6->Text).c_str());
+    O.UndeleteF = FormOperator->CheckBox1->Checked;
+    if(!DM->UpdateOperator(&O))
+    {
+      Application->MessageBox("Не могу записать изменения оператора!","АPUS",MB_OK| MB_ICONERROR);
+      return;
+    }
+    for(int i = 0; i < (int)DM->OpList.size(); i++)
+    {
+      if(strcmp(DM->OpList[i].OpName,O.OpName) == 0)
+      {
+        strcpy(DM->OpList[i].Password1, O.Password1);
+        DM->OpList[i].UndeleteF = O.UndeleteF;
+        DrawGrid2->Refresh();
+        break;
+      }
+    }
+  }
+  delete FormOperator;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TAuditForm::DelOpClick(TObject *Sender)
+{
+  Operator O;
+  int      Index;
+
+  if(!(DM->OpRights & rApEdit)) return;
+  if(DM->GrList.size() == 0) return;
+  Index = DrawGrid2->Row - 1;
+//  O = GrOperators[GrIndex];
+  O = GrOperators[Index];
+//  if(strcmp(O.OpName, DM->CurOpName.c_str()) == 0)
+  if(strcmp(O.OpName, DM->OpName.c_str()) == 0)
+  {
+    Application->MessageBox("Нельзя удалять самого себя - оператора!","АPUS",MB_OK| MB_ICONERROR);
+    return;
+  }
+//  if((O.UndeleteF)&&(DM->CurOpName != "Администратор"))
+  if((O.UndeleteF)&&(DM->OpName != "Администратор"))
+  {
+    Application->MessageBox("Неудаляемого оператора может удалять только Администратор!","АPUS",MB_OK| MB_ICONERROR);
+    return;
+  }
+  if(!DM->DelOperator(&O))
+  {
+     Application->MessageBox("Не могу удалить оператора!","АPUS",MB_OK| MB_ICONERROR);
+     return;
+  }
+  for(int i = 0; i < (int)DM->OpList.size(); i++)
+  {
+    if(strcmp(DM->OpList[i].OpName, O.OpName) == 0)
+    {
+       DM->OpList.erase(DM->OpList.begin() + i);
+       DrawGrid1Click(NULL);
+       Application->MessageBox("Оператор успешно удален!","АPUS",MB_OK| MB_ICONWARNING);
+       DrawGrid2->Refresh();
+        return;
+    }
+  }
+  return;
+}
+//---------------------------------------------------------------------------
+void __fastcall TAuditForm::DrawGrid1Click(TObject *Sender)
+{
+  if(DM->GrList.size() == 0) return;
+  GrOperators.erase(GrOperators.begin(), GrOperators.end());
+  GrIndex = DrawGrid1->Row -1;
+  GName = DM->GrList[GrIndex].GrName; GName = Trim(GName.SubString(1,24));
+  GRight = DM->GrList[GrIndex].PRights;
+  for(int i = 0; i < (int)DM->OpList.size(); i++)
+  {
+    if(Trim((AnsiString)DM->OpList[i].GroupName) == GName)
+       GrOperators.push_back(DM->OpList[i]);
+  }
+  DrawGrid2->Refresh();
+  int j = 1;
+  for(int i = 0; i < CheckListBox1->Count; i++)
+  {
+    if(GRight & j)
+      CheckListBox1->Checked[i] = true;
+    else
+      CheckListBox1->Checked[i] = false;
+    j = j << 1;
+  }
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TAuditForm::DrawGrid1DrawCell(TObject *Sender, int ACol,
+      int ARow, TRect &Rect, TGridDrawState State)
+{
+	AnsiString S;
+
+	if(DM->GrList.size())
+	{
+	  DrawGrid1->RowCount = DM->GrList.size() + 1;
+	  if(ARow)
+	  {
+  		switch (ACol)
+  		{
+  		  case 0:
+                    S = "";
+//                    for(int z = 0; z < 24; z++)  S += DM->GrList[ARow - 1].GrName[z];
+    		    S = DM->GrList[ARow - 1].GrName;
+  		  break;
+  		  case 1:
+    			S = DM->GrList[ARow - 1].GrFullName;
+  		  break;
+  		}
+  		DrawGrid1->Canvas->TextOut(Rect.Left+5,Rect.Top+2,S);
+    }
+	}
+	else
+	{
+		DrawGrid1->FixedRows = 1;
+		DrawGrid1->RowCount = 2;
+	}
+	if(!ARow)
+		DrawGrid1->Canvas->TextOut(Rect.Left+2,Rect.Top+2,GroupTitle[ACol]);
+}
+//---------------------------------------------------------------------------
+void __fastcall TAuditForm::DrawGrid2Click(TObject *Sender)
+{
+  if(GrOperators.size() == 0) return;
+  OpIndex = DrawGrid2->Row -1;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TAuditForm::DrawGrid2DrawCell(TObject *Sender, int ACol,
+      int ARow, TRect &Rect, TGridDrawState State)
+{
+	AnsiString S;
+
+	if(GrOperators.size())
+	{
+	  DrawGrid2->RowCount = GrOperators.size() + 1;
+	  if(ARow)
+	  {
+  		switch (ACol)
+  		{
+  		  case 0:
+    			S = GrOperators[ARow - 1].OpName;
+  		  break;
+  		  case 1:
+    			S = GrOperators[ARow - 1].GroupName;
+  		  break;
+  		}
+  		DrawGrid2->Canvas->TextOut(Rect.Left+5,Rect.Top+2,S);
+    }
+	}
+	else
+	{
+		DrawGrid2->FixedRows = 1;
+		DrawGrid2->RowCount = 2;
+	}
+	if(!ARow)
+		DrawGrid2->Canvas->TextOut(Rect.Left+2,Rect.Top+2,OperTitle[ACol]);
+}
+//---------------------------------------------------------------------------
+
+
